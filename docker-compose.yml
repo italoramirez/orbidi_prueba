@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  fast-api:
+    build: ./app
+    environment:
+      - POSTGRES_USER="postgres"
+      - POSTGRES_PASSWORD="1234"
+      - POSTGRES_DB="orbidi"
+    ports:
+      - "5002:80"
+    depends_on:
+      - db
+    networks:
+      - orbidi
+  db:
+    image: 'postgres:latest'
+    restart: always
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=orbidi
+    ports:
+      - '5433:5432'
+    networks:
+      - orbidi
+
+volumes:
+  postgres_data:
+
+networks:
+  orbidi:
+    driver: bridge
